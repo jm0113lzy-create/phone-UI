@@ -1,49 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <title>小手机</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>小手机界面</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="phone.js" defer></script>
 </head>
-<body>
-  <div class="phone-frame">
-    <!-- 顶栏 -->
-    <div class="chat-header">
-      <h2 id="char-name">Ghost</h2>
-      <div class="status">
-        <span class="dot online"></span>
-        <span id="status-text">正在狙击训练</span>
+<body class="theme-ins-light">
+  <div id="phone" class="phone-frame">
+    <!-- 顶栏（名字 + 状态 + 折叠信息） -->
+    <header id="topbar" class="topbar">
+      <div class="name-line">
+        <span id="charName">角色</span>
+      </div>
+      <div class="status-line">
+        <span class="dot"></span>
+        <span id="doingText">待命中</span>
       </div>
 
-      <div class="foldable">
-        <details>
-          <summary>📍 所在地</summary>
-          <p id="location">141军事基地 - 射击场</p>
-        </details>
-        <details>
-          <summary>🌤️ 心情</summary>
-          <p id="mood">专注、冷漠</p>
-        </details>
-        <details>
-          <summary>❤️ 心动值</summary>
-          <div class="bar">
-            <div id="affection-bar" style="width:35%"></div>
+      <details class="fold">
+        <summary>📍 所在地</summary>
+        <div id="locationText" class="fold-body">141 特遣队 · 基地</div>
+      </details>
+      <details class="fold">
+        <summary>🌤️ 心情</summary>
+        <div id="moodText" class="fold-body">冷静、专注</div>
+      </details>
+      <details class="fold">
+        <summary>❤️ 心动值</summary>
+        <div class="fold-body">
+          <div class="aff-bar">
+            <div id="affBarFill" style="width:35%"></div>
           </div>
-          <p id="affection">35%</p>
-        </details>
-        <details>
-          <summary>🧠 心理状态</summary>
-          <p id="mind">警惕，处于战斗状态</p>
-        </details>
-      </div>
-    </div>
+          <div id="affText">35%</div>
+        </div>
+      </details>
+      <details class="fold">
+        <summary>🧠 心理</summary>
+        <div id="mindText" class="fold-body">思绪平稳，戒备在。</div>
+      </details>
+    </header>
 
-    <!-- 聊天窗口 -->
-    <div class="chat-window" id="chat-window">
-      <p class="npc-msg">「保持冷静，集中注意力。」</p>
-    </div>
+    <!-- 视图容器 -->
+    <main id="views">
+      <!-- 聊天 -->
+      <section id="chatView" class="view active">
+        <div id="msgList" class="msg-list"></div>
+        <div class="input-bar">
+          <input id="msgInput" placeholder="输入消息…" />
+          <button id="sendBtn">发送</button>
+        </div>
+      </section>
+
+      <!-- 朋友圈 / 动态 -->
+      <section id="feedView" class="view">
+        <div class="feed-head">
+          <button class="pill active" data-feedtab="timeline">朋友圈</button>
+          <button class="pill" data-feedtab="ins">INS风</button>
+        </div>
+        <div id="feedList" class="feed-list"></div>
+        <div class="input-bar">
+          <input id="feedInput" placeholder="发布动态…" />
+          <button id="postBtn">发布</button>
+        </div>
+      </section>
+
+      <!-- 日记 -->
+      <section id="diaryView" class="view">
+        <div id="diaryList" class="diary-list"></div>
+        <div class="input-bar">
+          <input id="diaryInput" placeholder="写点今日心情…" />
+          <button id="diaryBtn">写入</button>
+        </div>
+      </section>
+
+      <!-- 设置 -->
+      <section id="settingsView" class="view">
+        <h3>外观</h3>
+        <div class="grid">
+          <label><input type="radio" name="theme" value="ins-light" checked /> 清透·INS</label>
+          <label><input type="radio" name="theme" value="dark" /> 暗色·夜幕</label>
+          <label><input type="radio" name="theme" value="clear" /> 透明·极简</label>
+        </div>
+
+        <h3>气泡样式</h3>
+        <div class="grid">
+          <label><input type="radio" name="bubble" value="blue" checked /> 冰蓝</label>
+          <label><input type="radio" name="bubble" value="green" /> 薄荷</label>
+          <label><input type="radio" name="bubble" value="pink" /> 樱粉</label>
+          <label><input type="radio" name="bubble" value="neutral" /> 中性</label>
+          <label><input type="radio" name="bubble" value="dark" /> 深色</label>
+        </div>
+
+        <h3>其他</h3>
+        <div class="grid">
+          <label><input type="checkbox" id="doubleTick" checked /> 显示双勾“已读”</label>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部导航（含未读红点） -->
+    <nav class="navbar">
+      <button class="tab active" data-view="chatView">
+        <img src="assets/chat_icon.png" />
+        <span class="badge" id="badgeChat" hidden>0</span>
+      </button>
+      <button class="tab" data-view="feedView">
+        <img src="assets/feed_icon.png" />
+        <span class="badge" id="badgeFeed" hidden>0</span>
+      </button>
+      <button class="tab" data-view="diaryView">
+        <img src="assets/diary_icon.png" />
+      </button>
+      <button class="tab" data-view="settingsView">
+        <img src="assets/settings_icon.png" />
+      </button>
+    </nav>
   </div>
-
-  <script src="phone.js"></script>
 </body>
 </html>
