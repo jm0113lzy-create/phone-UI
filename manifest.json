@@ -1,0 +1,9 @@
+{
+  "name": "silly-phone-plugin",
+  "display_name": "小手机界面",
+  "description": "在 SillyTavern 中模拟手机社交界面，与角色互动，显示实时状态。",
+  "version": "1.0.0",
+  "author": "AureliaRenee",
+  "entry": "src/index.html",
+  "icon": "assets/icon.png"
+}
