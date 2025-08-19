@@ -9,7 +9,7 @@
 - 替代默认聊天界面，模拟手机UI
 
 ## 安装
-1. 打开 SillyTavern → 插件 → 安装扩展 → 输入仓库地址：https://github.com/jm0113lzy-create/phone-UI/tree/main
+1. 打开 SillyTavern → 插件 → 安装扩展 → 输入仓库地址：(https://github.com/jm0113lzy-create/phone-UI)
 
 2. 点击 **Install just for me** 或 **Install for all users**
 3. 启用插件后，角色卡聊天会自动弹起小手机界面
