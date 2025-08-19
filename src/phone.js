@@ -215,4 +215,110 @@ window.addEventListener('DOMContentLoaded', async ()=>{
     saveCharStore(activeChar, store);
   }
 
-  renderTopbar(store
+  renderTopbar(store.state, activeChar);
+  applySettings(settings);
+  renderMessages(store, settings);
+  renderFeed(store);
+  renderDiary(store);
+
+  // ====== 事件绑定 ======
+  // 底栏切页
+  $$('.navbar .tab').forEach(b=>{
+    b.onclick = ()=>{
+      $$('.navbar .tab').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const view = b.dataset.view;
+      $$('.view').forEach(v=>v.classList.remove('active'));
+      $('#'+view).classList.add('active');
+
+      if(view==='chatView'){
+        // 标记已读
+        if (markAllRead(store)){ saveCharStore(activeChar,store); renderMessages(store, settings); }
+        $('#badgeChat').hidden = true;
+      }
+    };
+  });
+
+  // 发消息
+  $('#sendBtn').onclick = ()=>{
+    const val = $('#msgInput').value.trim();
+    if(!val) return;
+    store.messages.push({from:'me', text:val, time:nowHM(), read:false});
+    // 简单自动回：根据“正在做的事”
+    setTimeout(()=>{
+      store.messages.push({from:activeChar, text:`（${store.state.doing}）收到。`, time:nowHM(), read:false});
+      saveCharStore(activeChar, store);
+      renderMessages(store, settings);
+      if (!$('#chatView').classList.contains('active')){
+        // 未读徽标 +1
+        const badge = $('#badgeChat'); 
+        const unread = store.messages.filter(m=>m.from!== 'me' && !m.read).length;
+        badge.hidden = unread<=0;
+        badge.textContent = String(unread);
+      }
+    }, 600);
+    $('#msgInput').value = '';
+    saveCharStore(activeChar, store);
+    renderMessages(store, settings);
+  };
+
+  // 朋友圈发帖
+  $('#postBtn').onclick = ()=>{
+    const val = $('#feedInput').value.trim();
+    if(!val) return;
+    store.feed.unshift({author:'你', content:val, time:nowHM(), likes:0});
+    $('#feedInput').value='';
+    saveCharStore(activeChar, store);
+    renderFeed(store);
+    // 给“动态”徽标一个红点
+    const badge = $('#badgeFeed'); 
+    badge.hidden = false; 
+    badge.textContent = '';
+  };
+
+  // 日记写入
+  $('#diaryBtn').onclick = ()=>{
+    const val = $('#diaryInput').value.trim();
+    if(!val) return;
+    const d = new Date();
+    const date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    store.diary.push({date, entry:val});
+    $('#diaryInput').value='';
+    saveCharStore(activeChar, store);
+    renderDiary(store);
+  };
+
+  // 设置：主题/气泡/双勾
+  $$('input[name="theme"]').forEach(r=>{
+    if (r.value === settings.theme) r.checked = true;
+    r.onchange = ()=>{
+      settings.theme = r.value;
+      LS.set('sp_settings', settings);
+      applySettings(settings);
+    };
+  });
+  $$('input[name="bubble"]').forEach(r=>{
+    if (r.value === settings.bubble) r.checked = true;
+    r.onchange = ()=>{
+      settings.bubble = r.value;
+      LS.set('sp_settings', settings);
+      applySettings(settings);
+    };
+  });
+  $('#doubleTick').checked = !!settings.doubleTick;
+  $('#doubleTick').onchange = ()=>{
+    settings.doubleTick = $('#doubleTick').checked;
+    LS.set('sp_settings', settings);
+    renderMessages(store, settings);
+  };
+
+  // 每 30 秒刷新一次状态（未来可接任务脚本/世界书更新）
+  setInterval(async ()=>{
+    const pulled2 = await pullStatusFromST();
+    if (pulled2){
+      store.state = {...store.state, ...pulled2};
+      saveCharStore(activeChar, store);
+      renderTopbar(store.state, activeChar);
+    }
+  }, 30000);
+});
