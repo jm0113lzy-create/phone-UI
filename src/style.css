@@ -1,23 +1,76 @@
-body { font-family: sans-serif; background: #111; color: #fff; }
-.phone-frame {
-  width: 350px; margin: auto; border: 12px solid #333;
-  border-radius: 30px; background: #222; height: 600px;
-  display: flex; flex-direction: column;
+:root{
+  --bg:#f5f7fb;
+  --text:#111;
+  --muted:#6b7280;
+  --accent:#7dd3fc; /* 冰蓝 */
+  --bubble: url("assets/bubble_light_blue.png");
+  --bubble-me: url("assets/bubble_light_green.png");
 }
-.chat-header {
-  padding: 10px; background: #1c1c1c; text-align: center;
-  border-bottom: 2px solid #333;
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft Yahei",sans-serif;background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center;height:100vh}
+
+.phone-frame{
+  width:380px;height:780px;display:flex;flex-direction:column;border-radius:36px;
+  background:#fff url("assets/phone_frame_light.png") no-repeat center/cover;
+  box-shadow:0 18px 50px rgba(0,0,0,.25);overflow:hidden;position:relative
 }
-.dot {
-  height: 10px; width: 10px; border-radius: 50%; display: inline-block;
+
+.topbar{padding:10px 14px 6px;border-bottom:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(10px)}
+.name-line{font-weight:700;font-size:18px}
+.status-line{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin-top:2px}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+.fold{margin-top:6px}
+.fold>summary{cursor:pointer;font-size:12px;color:#0ea5e9;list-style:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold-body{padding:6px 0 0 12px;font-size:12px;color:#374151}
+.aff-bar{width:100%;height:8px;background:#e5e7eb;border-radius:999px;margin:6px 0}
+.aff-bar>div{height:8px;background:linear-gradient(90deg,#f0abfc,#f43f5e);border-radius:999px;transition:width .3s ease}
+
+#views{flex:1;display:flex;position:relative}
+.view{position:absolute;inset:0;display:none;flex-direction:column}
+.view.active{display:flex}
+
+.msg-list{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#eef2f7}
+.msg{max-width:72%;padding:10px 12px;border-radius:16px;background:var(--bubble) center/cover;color:#0f172a;position:relative}
+.msg.me{align-self:flex-end;background:var(--bubble-me) center/cover}
+.meta{display:flex;align-items:center;gap:6px;margin-top:4px;color:#64748b;font-size:10px}
+.tick{width:14px;height:10px;display:inline-block;vertical-align:middle;background:conic-gradient(from 90deg,#22c55e 0 25%,transparent 0 100%)}
+
+.feed-head{display:flex;gap:8px;padding:10px;border-bottom:1px solid rgba(0,0,0,.06);background:#fff}
+.pill{border:1px solid #cbd5e1;padding:6px 10px;border-radius:999px;background:#fff;color:#334155;cursor:pointer}
+.pill.active{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+.feed-list{flex:1;overflow:auto;padding:10px;background:#fafafa;display:flex;flex-direction:column;gap:10px}
+.feed-item{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px}
+.feed-meta{display:flex;justify-content:space-between;color:#6b7280;font-size:12px;margin-top:6px}
+.actions{display:flex;gap:10px;margin-top:8px}
+.actions button{border:none;background:#eef2f7;padding:6px 10px;border-radius:10px;cursor:pointer}
+
+.diary-list{flex:1;overflow:auto;padding:10px;background:#f8fafc;display:flex;flex-direction:column;gap:10px}
+.diary-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px}
+.diary-card .date{font-size:12px;color:#64748b;margin-bottom:4px}
+
+.input-bar{display:flex;gap:8px;padding:10px;background:#fff;border-top:1px solid rgba(0,0,0,.06)}
+.input-bar input{flex:1;border:1px solid #e5e7eb;border-radius:999px;padding:8px 12px}
+.input-bar button{border:none;background:#0ea5e9;color:#fff;border-radius:12px;padding:8px 14px;cursor:pointer}
+
+.navbar{height:62px;background:#111;display:flex;justify-content:space-around;align-items:center}
+.tab{position:relative;border:none;background:transparent;width:44px;height:44px;cursor:pointer;opacity:.8}
+.tab img{width:100%;height:100%}
+.tab.active{opacity:1}
+.badge{position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:999px;padding:2px 6px;font-size:11px}
+
+/* 主题切换 */
+body.theme-dark{
+  --bg:#0b0d12;--text:#e5e7eb;--muted:#94a3b8;--accent:#60a5fa;
+  --bubble:url("assets/bubble_dark.png");--bubble-me:url("assets/bubble_dark.png")
 }
-.online { background: lime; box-shadow: 0 0 5px lime; }
-.bar { width: 100%; background: #444; border-radius: 5px; }
-#affection-bar { height: 10px; background: linear-gradient(to right, pink, red); }
-.chat-window {
-  flex: 1; padding: 10px; overflow-y: auto;
+body.theme-clear{
+  --bg:transparent;--text:#0f172a;--muted:#6b7280;--accent:#a78bfa;
+  --bubble:url("assets/bubble_neutral.png");--bubble-me:url("assets/bubble_light_green.png")
 }
-.npc-msg {
-  background: #333; padding: 8px 12px; border-radius: 10px;
-  margin: 5px 0; display: inline-block;
-}
+
+/* 不同气泡 */
+body.bubble-blue{--bubble:url("assets/bubble_light_blue.png")}
+body.bubble-green{--bubble:url("assets/bubble_light_green.png")}
+body.bubble-pink{--bubble:url("assets/bubble_light_pink.png")}
+body.bubble-neutral{--bubble:url("assets/bubble_neutral.png")}
+body.bubble-dark{--bubble:url("assets/bubble_dark.png");--bubble-me:url("assets/bubble_dark.png")}
