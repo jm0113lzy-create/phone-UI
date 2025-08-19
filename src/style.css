@@ -1,0 +1,23 @@
+body { font-family: sans-serif; background: #111; color: #fff; }
+.phone-frame {
+  width: 350px; margin: auto; border: 12px solid #333;
+  border-radius: 30px; background: #222; height: 600px;
+  display: flex; flex-direction: column;
+}
+.chat-header {
+  padding: 10px; background: #1c1c1c; text-align: center;
+  border-bottom: 2px solid #333;
+}
+.dot {
+  height: 10px; width: 10px; border-radius: 50%; display: inline-block;
+}
+.online { background: lime; box-shadow: 0 0 5px lime; }
+.bar { width: 100%; background: #444; border-radius: 5px; }
+#affection-bar { height: 10px; background: linear-gradient(to right, pink, red); }
+.chat-window {
+  flex: 1; padding: 10px; overflow-y: auto;
+}
+.npc-msg {
+  background: #333; padding: 8px 12px; border-radius: 10px;
+  margin: 5px 0; display: inline-block;
+}
