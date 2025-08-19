@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>小手机</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- 顶栏 -->
+    <div class="chat-header">
+      <h2 id="char-name">Ghost</h2>
+      <div class="status">
+        <span class="dot online"></span>
+        <span id="status-text">正在狙击训练</span>
+      </div>
+
+      <div class="foldable">
+        <details>
+          <summary>📍 所在地</summary>
+          <p id="location">141军事基地 - 射击场</p>
+        </details>
+        <details>
+          <summary>🌤️ 心情</summary>
+          <p id="mood">专注、冷漠</p>
+        </details>
+        <details>
+          <summary>❤️ 心动值</summary>
+          <div class="bar">
+            <div id="affection-bar" style="width:35%"></div>
+          </div>
+          <p id="affection">35%</p>
+        </details>
+        <details>
+          <summary>🧠 心理状态</summary>
+          <p id="mind">警惕，处于战斗状态</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- 聊天窗口 -->
+    <div class="chat-window" id="chat-window">
+      <p class="npc-msg">「保持冷静，集中注意力。」</p>
+    </div>
+  </div>
+
+  <script src="phone.js"></script>
+</body>
+</html>
