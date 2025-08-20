@@ -322,3 +322,40 @@ window.addEventListener('DOMContentLoaded', async ()=>{
     }
   }, 30000);
 });
+
+   // 主题切换
+   let themes = [
+  {
+    name: "INS Clear",
+    bubble: "assets/bubbles/bubble_ins.png",
+    frame: "assets/frames/frame_white.png",
+    wallpaper: "assets/wallpaper/ins_clear.jpg"
+  },
+  {
+    name: "Cute Pastel",
+    bubble: "assets/bubbles/bubble_cute.png",
+    frame: "assets/frames/frame_pink.png",
+    wallpaper: "assets/wallpaper/cute_pastel.jpg"
+  },
+  {
+    name: "Dark Minimal",
+    bubble: "assets/bubbles/bubble_dark.png",
+    frame: "assets/frames/frame_black.png",
+    wallpaper: "assets/wallpaper/dark_minimal.jpg"
+  }
+];
+
+    let currentTheme = 0;
+
+    function applyTheme(index) {
+    let theme = themes[index];
+  document.querySelector(".chat-bubble").style.backgroundImage = `url(${theme.bubble})`;
+  document.querySelector(".phone-frame").style.backgroundImage = `url(${theme.frame})`;
+  document.querySelector(".phone-wallpaper").style.backgroundImage = `url(${theme.wallpaper})`;
+}
+
+// 切换主题按钮
+document.getElementById("themeSwitch").addEventListener("click", () => {
+  currentTheme = (currentTheme + 1) % themes.length;
+  applyTheme(currentTheme);
+});
