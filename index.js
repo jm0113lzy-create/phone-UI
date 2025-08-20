@@ -74,6 +74,15 @@ jQuery(async () => {
                         <input id="phone_ui_double_tick" type="checkbox">
                         <span>显示双勾"已读"</span>
                     </label>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;">
+                        <button id="phone_ui_toggle_btn" style="background: #0ea5e9; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
+                            切换手机界面显示/隐藏
+                        </button>
+                        <button id="phone_ui_debug_btn" style="background: #f59e0b; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-left: 8px;">
+                            调试信息
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>`;
@@ -119,6 +128,36 @@ jQuery(async () => {
         $('#phone_ui_double_tick').on('change', function() {
             extension_settings.doubleTick = $(this).is(':checked');
             saveSettings();
+        });
+
+        // 添加调试和切换按钮事件
+        $('#phone_ui_toggle_btn').on('click', function() {
+            if (phoneContainer) {
+                if (phoneContainer.style.display === 'none') {
+                    phoneContainer.style.display = 'block';
+                    console.log('[Phone UI] 手机界面已显示');
+                } else {
+                    phoneContainer.style.display = 'none';
+                    console.log('[Phone UI] 手机界面已隐藏');
+                }
+            } else {
+                console.log('[Phone UI] 手机界面未初始化，尝试创建...');
+                initPhoneUI();
+            }
+        });
+
+        $('#phone_ui_debug_btn').on('click', function() {
+            const debugInfo = {
+                enabled: extension_settings.enabled,
+                phoneContainerExists: !!phoneContainer,
+                phoneContainerVisible: phoneContainer ? phoneContainer.style.display !== 'none' : false,
+                activeChar: activeChar,
+                storeData: store,
+                thisChid: typeof this_chid !== 'undefined' ? this_chid : '未定义',
+                characters: typeof characters !== 'undefined' ? Object.keys(characters).length : '未定义'
+            };
+            console.log('[Phone UI Debug]', debugInfo);
+            alert('调试信息已输出到控制台，请按F12查看Console标签');
         });
     }
 
@@ -339,17 +378,18 @@ jQuery(async () => {
             style.id = 'phone-ui-styles';
             style.textContent = getPhoneCSS();
             document.head.appendChild(style);
+            }
         }
-    }
 
     // 获取手机界面的CSS样式
     function getPhoneCSS() {
         return `
+            /* 只对手机界面容器内的元素应用样式，避免影响主界面 */
             #phone-ui-container {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             }
             
-            .phone-frame {
+            #phone-ui-container             #phone-ui-container .phone-frame {
                 width: 100%;
                 height: 100%;
                 display: flex;
@@ -358,20 +398,20 @@ jQuery(async () => {
                 position: relative;
             }
             
-            .topbar {
+            #phone-ui-container .topbar {
                 padding: 10px 14px 6px;
                 border-bottom: 1px solid rgba(0,0,0,0.06);
                 background: rgba(255,255,255,0.82);
                 backdrop-filter: blur(10px);
             }
             
-            .name-line {
+            #phone-ui-container .name-line {
                 font-weight: 700;
                 font-size: 18px;
                 color: #111;
             }
             
-            .status-line {
+            #phone-ui-container .status-line {
                 display: flex;
                 align-items: center;
                 gap: 6px;
@@ -380,7 +420,7 @@ jQuery(async () => {
                 margin-top: 2px;
             }
             
-            .dot {
+            #phone-ui-container .dot {
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
@@ -388,28 +428,28 @@ jQuery(async () => {
                 box-shadow: 0 0 8px #22c55e;
             }
             
-            .fold {
+            #phone-ui-container .fold {
                 margin-top: 6px;
             }
             
-            .fold > summary {
+            #phone-ui-container .fold > summary {
                 cursor: pointer;
                 font-size: 12px;
                 color: #0ea5e9;
                 list-style: none;
             }
             
-            .fold > summary::-webkit-details-marker {
+            #phone-ui-container .fold > summary::-webkit-details-marker {
                 display: none;
             }
             
-            .fold-body {
+            #phone-ui-container .fold-body {
                 padding: 6px 0 0 12px;
                 font-size: 12px;
                 color: #374151;
             }
             
-            .aff-bar {
+            #phone-ui-container .aff-bar {
                 width: 100%;
                 height: 8px;
                 background: #e5e7eb;
@@ -417,31 +457,31 @@ jQuery(async () => {
                 margin: 6px 0;
             }
             
-            .aff-bar > div {
+            #phone-ui-container .aff-bar > div {
                 height: 8px;
                 background: linear-gradient(90deg, #f0abfc, #f43f5e);
                 border-radius: 999px;
                 transition: width 0.3s ease;
             }
             
-            #views {
+            #phone-ui-container #views {
                 flex: 1;
                 display: flex;
                 position: relative;
             }
             
-            .view {
+            #phone-ui-container .view {
                 position: absolute;
                 inset: 0;
                 display: none;
                 flex-direction: column;
             }
             
-            .view.active {
+            #phone-ui-container .view.active {
                 display: flex;
             }
             
-            .msg-list {
+            #phone-ui-container .msg-list {
                 flex: 1;
                 overflow: auto;
                 padding: 12px;
@@ -451,7 +491,7 @@ jQuery(async () => {
                 background: #eef2f7;
             }
             
-            .msg {
+            #phone-ui-container .msg {
                 max-width: 72%;
                 padding: 10px 12px;
                 border-radius: 16px;
@@ -461,12 +501,12 @@ jQuery(async () => {
                 border: 1px solid #e5e7eb;
             }
             
-            .msg.me {
+            #phone-ui-container .msg.me {
                 align-self: flex-end;
                 background: #dcfce7;
             }
             
-            .meta {
+            #phone-ui-container .meta {
                 display: flex;
                 align-items: center;
                 gap: 6px;
@@ -475,7 +515,7 @@ jQuery(async () => {
                 font-size: 10px;
             }
             
-            .input-bar {
+            #phone-ui-container .input-bar {
                 display: flex;
                 gap: 8px;
                 padding: 10px;
@@ -483,7 +523,7 @@ jQuery(async () => {
                 border-top: 1px solid rgba(0,0,0,0.06);
             }
             
-            .input-bar input {
+            #phone-ui-container .input-bar input {
                 flex: 1;
                 border: 1px solid #e5e7eb;
                 border-radius: 20px;
@@ -491,7 +531,7 @@ jQuery(async () => {
                 outline: none;
             }
             
-            .input-bar button {
+            #phone-ui-container .input-bar button {
                 border: none;
                 background: #0ea5e9;
                 color: #fff;
@@ -500,7 +540,7 @@ jQuery(async () => {
                 cursor: pointer;
             }
             
-            .navbar {
+            #phone-ui-container .navbar {
                 height: 62px;
                 background: #111;
                 display: flex;
@@ -508,7 +548,7 @@ jQuery(async () => {
                 align-items: center;
             }
             
-            .tab {
+            #phone-ui-container .tab {
                 position: relative;
                 border: none;
                 background: transparent;
@@ -520,11 +560,11 @@ jQuery(async () => {
                 font-size: 18px;
             }
             
-            .tab.active {
+            #phone-ui-container .tab.active {
                 opacity: 1;
             }
             
-            .badge {
+            #phone-ui-container .badge {
                 position: absolute;
                 top: -2px;
                 right: -2px;
@@ -535,7 +575,7 @@ jQuery(async () => {
                 font-size: 11px;
             }
             
-            .feed-head {
+            #phone-ui-container .feed-head {
                 display: flex;
                 gap: 8px;
                 padding: 10px;
@@ -543,7 +583,7 @@ jQuery(async () => {
                 background: #fff;
             }
             
-            .pill {
+            #phone-ui-container .pill {
                 border: 1px solid #cbd5e1;
                 padding: 6px 10px;
                 border-radius: 999px;
@@ -552,13 +592,13 @@ jQuery(async () => {
                 cursor: pointer;
             }
             
-            .pill.active {
+            #phone-ui-container .pill.active {
                 background: #0ea5e9;
                 color: #fff;
                 border-color: #0ea5e9;
             }
             
-            .feed-list {
+            #phone-ui-container .feed-list {
                 flex: 1;
                 overflow: auto;
                 padding: 10px;
@@ -568,14 +608,14 @@ jQuery(async () => {
                 gap: 10px;
             }
             
-            .feed-item {
+            #phone-ui-container .feed-item {
                 background: #fff;
                 border: 1px solid #e5e7eb;
                 border-radius: 14px;
                 padding: 10px;
             }
             
-            .diary-list {
+            #phone-ui-container .diary-list {
                 flex: 1;
                 overflow: auto;
                 padding: 10px;
@@ -585,14 +625,14 @@ jQuery(async () => {
                 gap: 10px;
             }
             
-            .diary-card {
+            #phone-ui-container .diary-card {
                 background: #fff;
                 border: 1px solid #e5e7eb;
                 border-radius: 14px;
                 padding: 10px;
             }
             
-            .diary-card .date {
+            #phone-ui-container .diary-card .date {
                 font-size: 12px;
                 color: #64748b;
                 margin-bottom: 4px;
