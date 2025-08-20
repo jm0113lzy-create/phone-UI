@@ -327,21 +327,21 @@ window.addEventListener('DOMContentLoaded', async ()=>{
    let themes = [
   {
     name: "INS Clear",
-    bubble: "assets/bubbles/bubble_ins.png",
-    frame: "assets/frames/frame_white.png",
-    wallpaper: "assets/wallpaper/ins_clear.jpg"
+    bubble: "bubble_light_blue.png",
+    frame: "phone_frame_clear.png",
+    wallpaper: "wallpaper_light_blue.jpg"
   },
   {
     name: "Cute Pastel",
-    bubble: "assets/bubbles/bubble_cute.png",
-    frame: "assets/frames/frame_pink.png",
-    wallpaper: "assets/wallpaper/cute_pastel.jpg"
+    bubble: "bubble_light_pink.png",
+    frame: "phone_frame_light.png",
+    wallpaper: "wallpaper_light_pink.jpg"
   },
   {
     name: "Dark Minimal",
-    bubble: "assets/bubbles/bubble_dark.png",
-    frame: "assets/frames/frame_black.png",
-    wallpaper: "assets/wallpaper/dark_minimal.jpg"
+    bubble: "bubble_dark.png",
+    frame: "phone_frame_dark.png",
+    wallpaper: "wallpaper_dark.jpg"
   }
 ];
 
