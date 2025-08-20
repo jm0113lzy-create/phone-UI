@@ -1,6 +1,6 @@
 {
   "name": "silly-phone-plugin",
-  "title": "小手机界面（通用多角色）",
+  "display_name": "小手机界面（通用多角色）",
   "description": "在 SillyTavern 里显示手机社交UI：聊天、已读/未读、状态栏、朋友圈/动态、日记本，支持任意角色卡自动适配。",
   "version": "1.0.0",
   "author": "AureliaRenee",
